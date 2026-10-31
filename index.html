@@ -82,14 +82,15 @@
                 <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50 shrink-0">
                     <img src="./assets/images/avatar-profile.webp" alt="Александр Павлов" class="w-full h-full object-cover">
                 </div>
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+                <nav class="hidden md:flex items-center gap-3 lg:gap-6 xl:gap-8 text-[13px] lg:text-sm font-medium text-gray-600">
                     <a href="#achievements" class="hover:text-black transition-colors">Достижения</a>
                     <a href="#cases" class="hover:text-black transition-colors">Кейсы</a>
                     <a href="#experience" class="hover:text-black transition-colors">Опыт работы</a>
                     <a href="#about" class="hover:text-black transition-colors">Обо мне</a>
+                    <a href="#reviews" class="hover:text-black transition-colors">Отзывы</a>
                     <a href="#articles" class="hover:text-black transition-colors">Статьи</a>
                 </nav>
-                <a href="https://t.me/Alex4ndr_2135" class="hidden md:inline-flex items-center justify-center px-6 py-3 bg-black text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-gray-800 transition-colors">
+                <a href="https://t.me/Alex4ndr_2135" class="hidden lg:inline-flex items-center justify-center px-5 xl:px-6 py-3 bg-black text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-gray-800 transition-colors">
                     Обсудить проект
                 </a>
             </header>
@@ -338,7 +339,7 @@
     </h2>
 
     <!-- Сетка: h-[520px] задает единую высоту для всех колонок на десктопе -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 md:gap-5 h-auto md:h-[520px]">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 md:gap-5 h-auto md:min-h-[520px]">
         
         <!-- 1. ТЕКСТ (Статус и описание) -->
         <div class="bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col justify-center transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
@@ -432,6 +433,434 @@
 
     </div>
 </section>
+<!-- ==================== СЕКЦИЯ ОТЗЫВОВ ==================== -->
+<style>
+    /* Лента отзывов: горизонтальный скролл со снапом */
+    .reviews-track {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 4px 4px 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .reviews-track::-webkit-scrollbar { display: none; }
+    @media (min-width: 768px) {
+        .reviews-track { gap: 24px; padding: 6px 8px 14px; }
+    }
+
+    .review-card {
+        flex: 0 0 100%;
+        display: flex;
+        scroll-snap-align: start;
+    }
+    @media (min-width: 768px) {
+        .review-card { flex: 0 0 410px; }
+    }
+
+    /* Текст: лимит по строкам, а не по пикселям — масштабируется вместе со шрифтом */
+    .review-text {
+        --review-lines: 12;
+        position: relative;
+        overflow: hidden;
+        max-height: calc(var(--review-lines) * 1.625em);
+    }
+    @media (min-width: 768px) {
+        .review-text { --review-lines: 10; }
+    }
+    .review-text::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 4.5rem;
+        background: linear-gradient(to bottom, rgba(15, 15, 15, 0), #0F0F0F 88%);
+        opacity: 0;
+        transition: opacity .3s ease;
+        pointer-events: none;
+    }
+    .review-card.is-clamped .review-text::after { opacity: 1; }
+    .review-text p + p { margin-top: .9em; }
+
+    .review-more {
+        display: none;
+        margin-top: 14px;
+        align-self: flex-start;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #8B5CF6;
+        transition: color .2s ease;
+    }
+    .review-more:hover, .review-more:focus-visible { color: #B07CFF; }
+    .review-card.is-clamped .review-more { display: inline-flex; }
+
+    .review-avatar {
+        width: 48px; height: 48px;
+        border-radius: 999px;
+        overflow: hidden;
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(139, 92, 246, .16);
+        color: #B07CFF;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: .02em;
+    }
+    @media (min-width: 768px) { .review-avatar { width: 56px; height: 56px; font-size: 17px; } }
+    .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Точки-индикаторы — только на мобилке */
+    .reviews-dots { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; }
+    @media (min-width: 768px) { .reviews-dots { display: none; } }
+    .reviews-dot {
+        width: 6px; height: 6px; border-radius: 999px;
+        background: #3A3A3A;
+        transition: width .3s ease, background-color .3s ease;
+    }
+    .reviews-dot.is-active { width: 28px; background: #FFFFFF; }
+
+    /* Модалка полного отзыва */
+    .review-dialog {
+        position: fixed; inset: 0; margin: auto;
+        width: min(720px, calc(100vw - 24px));
+        max-height: min(86vh, 780px);
+        padding: 0; border: 0; background: transparent;
+        overflow: visible;
+    }
+    .review-dialog::backdrop { background: rgba(10, 10, 10, .82); backdrop-filter: blur(6px); }
+    .review-dialog-panel {
+        position: relative;
+        background: #0F0F0F;
+        border: 1px solid rgba(255, 255, 255, .06);
+        border-radius: 20px;
+        padding: 28px 22px;
+        max-height: inherit;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+    @media (min-width: 768px) { .review-dialog-panel { padding: 40px; } }
+    .review-dialog-text { color: #D4D4D4; line-height: 1.7; }
+    .review-dialog-text p + p { margin-top: 1em; }
+    .review-dialog-close {
+        position: absolute; top: 12px; right: 12px;
+        width: 36px; height: 36px; border-radius: 999px;
+        display: flex; align-items: center; justify-content: center;
+        color: #A3A3A3; border: 1px solid rgba(255,255,255,.1);
+        background: #0F0F0F;
+        transition: color .2s ease, border-color .2s ease;
+    }
+    .review-dialog-close:hover { color: #FFFFFF; border-color: #8B5CF6; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reviews-dot, .review-text::after, .review-more, .review-dialog-close { transition: none; }
+    }
+</style>
+
+<section id="reviews" class="w-full max-w-[1400px] py-10 md:py-20 px-2 md:px-8 shrink-0">
+
+    <div class="flex items-end justify-between gap-4 mb-8 md:mb-12 pl-4 md:pl-8">
+        <h2 class="font-bebas text-[48px] md:text-[64px] leading-none text-[#737373] tracking-wide">
+            ОТЗЫВЫ
+        </h2>
+
+        <!-- Стрелки — только на десктопе -->
+        <div class="hidden md:flex items-center gap-2 shrink-0">
+            <button type="button" data-reviews-prev aria-label="Предыдущий отзыв"
+                    class="w-10 h-10 rounded-full border border-white/10 text-white/50 flex items-center justify-center transition-colors duration-300 hover:border-[#8B5CF6] hover:text-[#8B5CF6] disabled:opacity-30 disabled:pointer-events-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" data-reviews-next aria-label="Следующий отзыв"
+                    class="w-10 h-10 rounded-full border border-white/10 text-white/50 flex items-center justify-center transition-colors duration-300 hover:border-[#8B5CF6] hover:text-[#8B5CF6] disabled:opacity-30 disabled:pointer-events-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!--
+        КАК ДОБАВИТЬ ОТЗЫВ: скопировать блок <li class="review-card">...</li> целиком.
+        Длина текста значения не имеет: лишнее обрежется градиентом,
+        появится кнопка «Читать полностью» и полный текст откроется в модалке.
+        Фото автора: положить файл в assets/images/reviews/ и раскомментировать <img>.
+    -->
+    <ul class="reviews-track" data-reviews-track tabindex="0" role="list" aria-label="Отзывы клиентов">
+
+        <!-- ОТЗЫВ 1 -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Опыт работы в дизайне — 2 года. Начинал с YouTube и видеомонтажа — это научило меня чувствовать визуал и работать в срок.</p>
+                    <p>Коммуникабелен, работаю в связке с командой и продактом (а если его нет — беру его функции на себя).</p>
+                    <p>Помимо дизайна закрываю задачи по видеомонтажу и базовой 3D-графике.</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <!-- <img src="./assets/images/reviews/kuatbek.webp" alt="Куатбек Кайсар Аскарулы" loading="lazy"> -->
+                        К
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Куатбек Кайсар Аскарулы</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Founder Tezbar</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- ОТЗЫВ 2 — ЗАМЕНИТЬ -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Здесь будет текст отзыва. Замените этот абзац на реальную цитату клиента — блок рассчитан на любой объём: длинный текст обрежется градиентом и откроется по кнопке «Читать полностью».</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <!-- <img src="./assets/images/reviews/author-2.webp" alt="" loading="lazy"> -->
+                        И
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- ОТЗЫВ 3 — ЗАМЕНИТЬ -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Здесь будет текст отзыва. Короткая цитата тоже подходит: карточка не растянется и не оставит дыры — автор всегда прижат к нижнему краю.</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <!-- <img src="./assets/images/reviews/author-3.webp" alt="" loading="lazy"> -->
+                        И
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- ОТЗЫВ 4 — ЗАМЕНИТЬ -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Здесь будет текст отзыва.</p>
+                    <p>Второй абзац — чтобы проверить, как выглядят несколько абзацев с отбивкой.</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <!-- <img src="./assets/images/reviews/author-4.webp" alt="" loading="lazy"> -->
+                        И
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- ОТЗЫВ 5 — ЗАМЕНИТЬ -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Здесь будет текст отзыва.</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <!-- <img src="./assets/images/reviews/author-5.webp" alt="" loading="lazy"> -->
+                        И
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+
+    <!-- Точки — только мобилка, количество считается само -->
+    <div class="reviews-dots" data-reviews-dots></div>
+</section>
+
+<!-- Модалка полного отзыва -->
+<dialog id="review-dialog" class="review-dialog" aria-labelledby="review-dialog-title">
+    <div class="review-dialog-panel">
+        <p id="review-dialog-title" class="font-bebas text-lg text-[#737373] uppercase tracking-wider mb-4">Отзыв</p>
+        <div class="review-dialog-text text-sm md:text-base" data-review-dialog-text></div>
+        <div class="mt-8 flex items-center gap-3 md:gap-4" data-review-dialog-author></div>
+    </div>
+    <button type="button" class="review-dialog-close" data-review-close aria-label="Закрыть отзыв">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+</dialog>
+
+<script>
+(function () {
+    var track = document.querySelector('[data-reviews-track]');
+    if (!track) return;
+
+    var cards = Array.prototype.slice.call(track.querySelectorAll('.review-card'));
+    var dotsWrap = document.querySelector('[data-reviews-dots]');
+    var prevBtn = document.querySelector('[data-reviews-prev]');
+    var nextBtn = document.querySelector('[data-reviews-next]');
+    var dialog = document.getElementById('review-dialog');
+    var dialogText = dialog.querySelector('[data-review-dialog-text]');
+    var dialogAuthor = dialog.querySelector('[data-review-dialog-author]');
+    var dialogClose = dialog.querySelector('[data-review-close]');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* 1. Обрезка: кнопка появляется только если текст не влез целиком */
+    function syncClamp() {
+        cards.forEach(function (card) {
+            var text = card.querySelector('[data-review-text]');
+            if (!text) return;
+            var overflow = text.scrollHeight - text.clientHeight;
+            card.classList.toggle('is-clamped', overflow > 2);
+        });
+    }
+
+    /* 2. Точки по числу отзывов */
+    var dots = cards.map(function (card, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'reviews-dot';
+        dot.setAttribute('aria-label', 'Отзыв ' + (i + 1));
+        dot.addEventListener('click', function () { scrollToCard(cards[i]); });
+        dotsWrap.appendChild(dot);
+        return dot;
+    });
+
+    function trackLeft() {
+        return track.getBoundingClientRect().left + (parseFloat(getComputedStyle(track).paddingLeft) || 0);
+    }
+
+    function scrollToCard(card) {
+        var delta = card.getBoundingClientRect().left - trackLeft();
+        if (Math.abs(delta) < 2) return;
+        track.scrollBy({ left: delta, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+
+    function activeIndex() {
+        var best = 0;
+        var bestDist = Infinity;
+        cards.forEach(function (card, i) {
+            var d = Math.abs(card.getBoundingClientRect().left - trackLeft());
+            if (d < bestDist) { bestDist = d; best = i; }
+        });
+        return best;
+    }
+
+    function syncState() {
+        var i = activeIndex();
+        dots.forEach(function (dot, n) { dot.classList.toggle('is-active', n === i); });
+        if (prevBtn) prevBtn.disabled = track.scrollLeft <= 2;
+        if (nextBtn) nextBtn.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    }
+
+    var raf = 0;
+    track.addEventListener('scroll', function () {
+        if (raf) return;
+        raf = requestAnimationFrame(function () { raf = 0; syncState(); });
+    }, { passive: true });
+
+    if (prevBtn) prevBtn.addEventListener('click', function () {
+        scrollToCard(cards[Math.max(0, activeIndex() - 1)]);
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function () {
+        scrollToCard(cards[Math.min(cards.length - 1, activeIndex() + 1)]);
+    });
+
+    /* 3. Перетаскивание мышью на десктопе */
+    var dragging = false, dragMoved = false, startX = 0, startScroll = 0;
+    track.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'touch' || e.button !== 0) return;
+        dragging = true; dragMoved = false;
+        startX = e.clientX; startScroll = track.scrollLeft;
+    });
+    track.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > 6) dragMoved = true;
+        if (dragMoved) track.scrollLeft = startScroll - dx;
+    });
+    window.addEventListener('pointerup', function () { dragging = false; });
+    track.addEventListener('click', function (e) {
+        if (!dragMoved) return;
+        e.preventDefault();
+        e.stopPropagation();
+        dragMoved = false;
+    }, true);
+
+    /* 4. Модалка полного текста */
+    function lockScroll(on) {
+        document.documentElement.style.overflow = on ? 'hidden' : '';
+    }
+
+    cards.forEach(function (card) {
+        var btn = card.querySelector('[data-review-more]');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            dialogText.innerHTML = card.querySelector('[data-review-text]').innerHTML;
+            dialogAuthor.innerHTML = card.querySelector('[data-review-author]').innerHTML;
+            lockScroll(true);
+            if (typeof dialog.showModal === 'function') dialog.showModal();
+            else dialog.setAttribute('open', '');
+        });
+    });
+
+    function closeDialog() {
+        if (typeof dialog.close === 'function') dialog.close();
+        else dialog.removeAttribute('open');
+        lockScroll(false);
+    }
+    dialogClose.addEventListener('click', closeDialog);
+    dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) closeDialog();
+    });
+    dialog.addEventListener('close', function () { lockScroll(false); });
+
+    /* 5. Пересчёт обрезки при ресайзе и после загрузки шрифтов */
+    var resizeTimer = 0;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(syncClamp, 150);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncClamp);
+
+    syncClamp();
+    syncState();
+})();
+</script>
+
 <!-- СЕКЦИЯ СТАТЬИ -->
 <section id="articles" class="w-full max-w-[1400px] py-10 md:py-20 px-2 md:px-8 shrink-0">
     
@@ -501,7 +930,7 @@
         </div>
 
         <!-- Контент -->
-        <div class="flex flex-col items-center text-center w-full max-w-4xl mx-auto mt-8 md:mt-0">
+        <div class="relative z-10 flex flex-col items-center text-center w-full max-w-4xl mx-auto mt-8 md:mt-0">
             
             <!-- Заголовок -->
             <h2 class="font-bebas text-[48px] md:text-[80px] leading-none text-black tracking-wide mb-3 md:mb-[10px]">
@@ -530,9 +959,9 @@
                 </a>
 
                 <!-- Плашка "Доступен..." -->
-                <p class="font-bebas text-sm md:text-2xl uppercase tracking-wider text-gray-700 text-center leading-tight">
+                <p class="w-full sm:w-auto px-4 font-bebas text-sm md:text-2xl uppercase tracking-wider text-gray-700 text-center leading-tight whitespace-nowrap">
                     ДОСТУПЕН ДЛЯ ФРИЛАНСА И ПОЛНОЙ ЗАНЯТОСТИ.
-                </div>
+                </p>
 
             </div>
 
@@ -552,6 +981,7 @@
                 <a href="#cases" class="hover:text-[#8B5CF6] transition-colors w-fit">Кейсы</a>
                 <a href="#experience" class="hover:text-[#8B5CF6] transition-colors w-fit">Опыт работы</a>
                 <a href="#about" class="hover:text-[#8B5CF6] transition-colors w-fit">Обо мне</a>
+                <a href="#reviews" class="hover:text-[#8B5CF6] transition-colors w-fit">Отзывы</a>
                 <a href="#articles" class="hover:text-[#8B5CF6] transition-colors w-fit opacity-50 cursor-not-allowed">Статьи (скоро)</a>
             </nav>
         </div>
