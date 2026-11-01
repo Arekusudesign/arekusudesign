@@ -438,6 +438,7 @@
     /* Лента отзывов: горизонтальный скролл со снапом */
     .reviews-track {
         display: flex;
+        justify-content: safe center;
         gap: 16px;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
@@ -585,15 +586,18 @@
         появится кнопка «Читать полностью» и полный текст откроется в модалке.
         Фото автора: положить файл в assets/images/reviews/ и раскомментировать <img>.
     -->
-    <ul class="reviews-track" data-reviews-track tabindex="0" role="list" aria-label="Отзывы клиентов">
+        <ul class="reviews-track" data-reviews-track tabindex="0" role="list" aria-label="Отзывы клиентов">
 
         <!-- ОТЗЫВ 1 -->
         <li class="review-card">
             <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
                 <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
-                    <p>Опыт работы в дизайне — 2 года. Начинал с YouTube и видеомонтажа — это научило меня чувствовать визуал и работать в срок.</p>
-                    <p>Коммуникабелен, работаю в связке с командой и продактом (а если его нет — беру его функции на себя).</p>
-                    <p>Помимо дизайна закрываю задачи по видеомонтажу и базовой 3D-графике.</p>
+                    <p>Работа над TezBar — это создание сложного финтех-продукта с нуля. В таких условиях дизайнер должен быть не просто иллюстратором, а полноценным продуктовым партнёром.</p>
+                    <p>Хочу выделить в работе:</p>
+                    <p>Постоянный плотный контакт с бэкендом и разработкой. Саша слышит задачи бизнеса, умеет задавать правильные вопросы, аргументировать решения и оперативно подхватывать фидбек.</p>
+                    <p>Идеальный порядок в Figma — дизайн-система, компоненты, все состояния ошибок и загрузок. Это сильно упрощает и ускоряет вёрстку на Flutter.</p>
+                    <p>Умение превращать сложные банковские и логистические сценарии (безопасная сделка, холды, сплиты) в простые и понятные 2–3 клика для пользователя.</p>
+                    <p>Высокая гибкость при смене гипотез и полное погружение в результат. Саша — сильный командный игрок с продуктовым мышлением. Смело рекомендую в любую IT-команду!</p>
                 </div>
                 <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
                     Читать полностью
@@ -606,17 +610,18 @@
                     </div>
                     <div class="min-w-0">
                         <p class="text-white font-semibold text-sm md:text-base leading-snug">Куатбек Кайсар Аскарулы</p>
-                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Founder Tezbar</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Основатель Tezbar</p>
                     </div>
                 </div>
             </div>
         </li>
 
-        <!-- ОТЗЫВ 2 — ЗАМЕНИТЬ -->
+        <!-- ОТЗЫВ 2 -->
         <li class="review-card">
             <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
                 <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
-                    <p>Здесь будет текст отзыва. Замените этот абзац на реальную цитату клиента — блок рассчитан на любой объём: длинный текст обрежется градиентом и откроется по кнопке «Читать полностью».</p>
+                    <p>До того как я познакомился с Александром в Cofounders, я вообще не встречал дизайнеров, у которых и скилл на уровне, и с кем просто по-человечески комфортно работать. С ним не нужно тратить полдня на объяснения: он въезжает в задачу с первых минут и уже на старте даёт не просто варианты, а те, что реально работают. Его решения сразу попадают в цель — и по стилю, и по логике интерфейса.</p>
+                    <p>Лично отмечу: работать с ним — это про спокойствие и результат.</p>
                 </div>
                 <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
                     Читать полностью
@@ -624,86 +629,27 @@
                 </button>
                 <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
                     <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/author-2.webp" alt="" loading="lazy"> -->
+                        <!-- <img src="./assets/images/reviews/ilyas.webp" alt="Ильяс Сабитович" loading="lazy"> -->
                         И
                     </div>
                     <div class="min-w-0">
-                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
-                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Ильяс Сабитович</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Frontend-разработчик, Cofounders Match</p>
                     </div>
                 </div>
             </div>
         </li>
 
-        <!-- ОТЗЫВ 3 — ЗАМЕНИТЬ -->
-        <li class="review-card">
-            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
-                    <p>Здесь будет текст отзыва. Короткая цитата тоже подходит: карточка не растянется и не оставит дыры — автор всегда прижат к нижнему краю.</p>
-                </div>
-                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
-                    Читать полностью
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
-                    <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/author-3.webp" alt="" loading="lazy"> -->
-                        И
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
-                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
-                    </div>
-                </div>
-            </div>
-        </li>
+        <!--
+            ЖДУТ ТЕКСТА (карточку не показываем, пока нет цитаты):
+              · Захар Слинин — Cofounders Match
+              · Лиля — волонтёр приюта «Верный друг»
+              · Виктор Дрегер — руководитель TMHMT
 
-        <!-- ОТЗЫВ 4 — ЗАМЕНИТЬ -->
-        <li class="review-card">
-            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
-                    <p>Здесь будет текст отзыва.</p>
-                    <p>Второй абзац — чтобы проверить, как выглядят несколько абзацев с отбивкой.</p>
-                </div>
-                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
-                    Читать полностью
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
-                    <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/author-4.webp" alt="" loading="lazy"> -->
-                        И
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
-                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
-                    </div>
-                </div>
-            </div>
-        </li>
-
-        <!-- ОТЗЫВ 5 — ЗАМЕНИТЬ -->
-        <li class="review-card">
-            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
-                    <p>Здесь будет текст отзыва.</p>
-                </div>
-                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
-                    Читать полностью
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
-                    <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/author-5.webp" alt="" loading="lazy"> -->
-                        И
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Имя Фамилия</p>
-                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Роль, компания</p>
-                    </div>
-                </div>
-            </div>
-        </li>
+            Чтобы добавить: скопировать любой <li class="review-card">...</li> выше,
+            заменить абзацы текста, имя, роль и инициалы на аватарке.
+            Фото — в assets/images/reviews/, путь прописать в закомментированном <img>.
+        -->
 
     </ul>
 
@@ -733,6 +679,7 @@
     var prevBtn = document.querySelector('[data-reviews-prev]');
     var nextBtn = document.querySelector('[data-reviews-next]');
     var dialog = document.getElementById('review-dialog');
+    var dialogPanel = dialog.querySelector('.review-dialog-panel');
     var dialogText = dialog.querySelector('[data-review-dialog-text]');
     var dialogAuthor = dialog.querySelector('[data-review-dialog-author]');
     var dialogClose = dialog.querySelector('[data-review-close]');
@@ -834,6 +781,8 @@
             lockScroll(true);
             if (typeof dialog.showModal === 'function') dialog.showModal();
             else dialog.setAttribute('open', '');
+            dialogPanel.scrollTop = 0;
+            if (dialogClose) dialogClose.focus();
         });
     });
 
