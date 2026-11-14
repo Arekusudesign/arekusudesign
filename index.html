@@ -564,10 +564,10 @@
         gap: 6px;
         font-size: 14px;
         font-weight: 500;
-        color: #8B5CF6;
+        color: #737373;
         transition: color .2s ease;
     }
-    .review-more:hover, .review-more:focus-visible { color: #B07CFF; }
+    .review-more:hover, .review-more:focus-visible { color: #A3A3A3; }
     .review-card.is-clamped .review-more { display: inline-flex; }
 
     .review-avatar {
@@ -576,8 +576,8 @@
         overflow: hidden;
         flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
-        background: rgba(139, 92, 246, .16);
-        color: #B07CFF;
+        background: #0F0F0F;
+        color: #737373;
         font-weight: 600;
         font-size: 15px;
         letter-spacing: .02em;
@@ -656,7 +656,8 @@
         КАК ДОБАВИТЬ ОТЗЫВ: скопировать блок <li class="review-card">...</li> целиком.
         Длина текста значения не имеет: лишнее обрежется градиентом,
         появится кнопка «Читать полностью» и полный текст откроется в модалке.
-        Фото автора: положить файл в assets/images/reviews/ и раскомментировать <img>.
+        Фото автора: положить файл в assets/images/reviews/ и вставить <img> внутрь
+        .review-avatar. Без фото — просто буква (кружок цвета карточки, буква серая).
     -->
         <ul class="reviews-track" data-reviews-track tabindex="0" role="list" aria-label="Отзывы клиентов">
 
@@ -677,8 +678,7 @@
                 </button>
                 <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
                     <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/kuatbek.webp" alt="Куатбек Кайсар Аскарулы" loading="lazy"> -->
-                        К
+                        <img src="./assets/images/reviews/kuatbek.jpg" alt="Куатбек Кайсар Аскарулы" loading="lazy">
                     </div>
                     <div class="min-w-0">
                         <p class="text-white font-semibold text-sm md:text-base leading-snug">Куатбек Кайсар Аскарулы</p>
@@ -701,8 +701,7 @@
                 </button>
                 <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
                     <div class="review-avatar">
-                        <!-- <img src="./assets/images/reviews/ilyas.webp" alt="Ильяс Сабитович" loading="lazy"> -->
-                        И
+                        <img src="./assets/images/reviews/ilyas.jpg" alt="Ильяс Сабитович" loading="lazy">
                     </div>
                     <div class="min-w-0">
                         <p class="text-white font-semibold text-sm md:text-base leading-snug">Ильяс Сабитович</p>
@@ -712,16 +711,72 @@
             </div>
         </li>
 
-        <!--
-            ЖДУТ ТЕКСТА (карточку не показываем, пока нет цитаты):
-              · Захар Слинин — Cofounders Match
-              · Лиля — волонтёр приюта «Верный друг»
-              · Виктор Дрегер — руководитель TMHMT
+        <!-- ОТЗЫВ 3 -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Александр показал себя отличным дизайнером: всё сделал максимально качественно и проработано. Кроме того, делал сверх своей работы и выступал отличным SMM-менеджером.</p>
+                    <p>Рекомендую!</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <img src="./assets/images/reviews/zahar.jpg" alt="Захар Слинин" loading="lazy">
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Захар Слинин</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Сооснователь Cofounders Match</p>
+                    </div>
+                </div>
+            </div>
+        </li>
 
-            Чтобы добавить: скопировать любой <li class="review-card">...</li> выше,
-            заменить абзацы текста, имя, роль и инициалы на аватарке.
-            Фото — в assets/images/reviews/, путь прописать в закомментированном <img>.
-        -->
+        <!-- ОТЗЫВ 4 -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Высший класс — однозначно рекомендую! Сотрудничество по дизайну и созданию моего лендинга было просто идеальным от начала и до конца. Все мои пожелания и идеи были не просто точно поняты, но и превзойдены благодаря креативному подходу и невероятному вниманию к деталям.</p>
+                    <p>Лендинг выглядит не только современно и абсолютно профессионально, но и стратегически выстроен так, чтобы эффективно привлекать клиентов. Коммуникация всегда была очень быстрой, прозрачной и лёгкой. Если вы ищете дизайнера, который мастерски сочетает эстетику и психологию продаж, то вы обратились по адресу. Большое спасибо за великолепный результат!</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">В</div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Виктор Дрегер</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Руководитель TMHMT</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- ОТЗЫВ 5 -->
+        <li class="review-card">
+            <div class="w-full bg-[#0F0F0F] rounded-[20px] p-6 md:p-8 flex flex-col transition-shadow duration-500 ease-out hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
+                <div class="review-text text-gray-300 text-sm md:text-base leading-relaxed" data-review-text>
+                    <p>Александр — вдумчивый, внимательный, талантливый дизайнер, с которым мы работаем уже над третьим проектом. Он талантливо организует собственную работу и работу команды: вовремя проявляет инициативу, гибко мыслит, кратко и ёмко излагает предложения, доброжелательно коммуницирует и с коллегами, и с заказчиком, отлично держит фокус на дедлайнах — в том числе вовремя напоминая о подвисшей задаче с моей, например, стороны (за это отдельное спасибо!).</p>
+                    <p>Мы трудимся над благотворительным проектом, а в волонтёрских проектах много нюансов. В Александре же я уверена и спокойно иду в новый общий проект.</p>
+                </div>
+                <button type="button" class="review-more" data-review-more aria-haspopup="dialog">
+                    Читать полностью
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="mt-auto pt-6 flex items-center gap-3 md:gap-4" data-review-author>
+                    <div class="review-avatar">
+                        <img src="./assets/images/reviews/lilya.jpg" alt="Лиля" loading="lazy">
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-semibold text-sm md:text-base leading-snug">Лиля</p>
+                        <p class="text-[#8B5CF6] text-sm md:text-base leading-snug mt-0.5">Волонтёр приюта «Верный друг»</p>
+                    </div>
+                </div>
+            </div>
+        </li>
 
     </ul>
 
