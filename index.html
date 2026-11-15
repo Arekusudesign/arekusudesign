@@ -252,6 +252,108 @@
         </div>
     </section>
 <!-- СЕКЦИЯ КЕЙСОВ -->
+<style>
+    /* Кейсы: до 1024px — прежние карточки, с 1024px — строки с обложкой справа */
+    .cases-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 768px) { .cases-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; } }
+
+    .case-card {
+        position: relative;
+        display: block;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #0F0F0F;
+        transition: transform .5s ease-out, box-shadow .5s ease-out;
+    }
+    .case-card:hover { transform: scale(1.02); box-shadow: 0 10px 40px -10px rgba(139, 92, 246, .1); }
+
+    .case-media { width: 100%; aspect-ratio: 627 / 661; background: #1F2937; isolation: isolate; }
+    .case-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .case-caption { padding: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .case-title {
+        font-family: 'Bebas-Neue-Cyrillic', sans-serif;
+        font-size: 20px; line-height: 28px;
+        color: #fff; letter-spacing: .025em;
+        margin-bottom: 4px;
+        transition: color .3s ease;
+    }
+    @media (min-width: 768px) { .case-title { font-size: 24px; line-height: 32px; } }
+    .case-sub { font-size: 14px; line-height: 20px; color: #9CA3AF; }
+    @media (min-width: 768px) { .case-sub { font-size: 16px; line-height: 24px; } }
+
+    .case-arrow { width: 24px; height: 24px; flex-shrink: 0; color: #6B7280; transition: color .3s ease, transform .3s ease; }
+    .case-card:hover .case-arrow, .case-card:focus-visible .case-arrow { color: #8B5CF6; transform: translateX(4px); }
+
+    .case-chips { display: none; }
+
+    @media (min-width: 1024px) {
+        .cases-grid { display: block; }
+
+        .case-card {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: stretch;
+            gap: 56px;
+            padding: 56px 0;
+            background: transparent;
+            border-radius: 0;
+            overflow: visible;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+        }
+        .cases-grid > .case-card:last-child { border-bottom: 1px solid rgba(255, 255, 255, .07); }
+        .case-card:hover { transform: none; box-shadow: none; }
+
+        .case-media { flex: 0 0 52%; width: 52%; aspect-ratio: 4 / 3; border-radius: 20px; overflow: hidden; }
+        .case-media img { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+        .case-media--up img { object-position: 50% 20%; }
+        .case-card:hover .case-media img, .case-card:focus-visible .case-media img { transform: scale(1.03); }
+
+        .case-caption {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 0;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+
+        .case-chips { display: flex; align-items: center; gap: 12px; }
+        .case-logo {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: #fff; color: #0A0A0A;
+            font-family: 'Bebas-Neue-Cyrillic', sans-serif;
+            font-size: 20px; line-height: 1;
+            letter-spacing: .03em;
+            padding-top: 2px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .case-tag {
+            margin-left: auto;
+            padding: 6px 14px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 999px;
+            font-size: 11px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: #9C9C9C;
+            white-space: nowrap;
+        }
+
+        .case-title { font-size: 48px; line-height: .95; margin-bottom: 18px; }
+        @media (min-width: 1280px) { .case-title { font-size: 56px; } }
+        .case-card:hover .case-title, .case-card:focus-visible .case-title { color: #B07CFF; }
+        .case-sub { font-size: 16px; max-width: 440px; }
+        .case-arrow { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .case-card, .case-media img, .case-title, .case-arrow { transition: none; }
+        .case-card:hover { transform: none; }
+        .case-card:hover .case-media img { transform: none; }
+    }
+</style>
 <section id="cases" class="w-full max-w-[1400px] py-10 md:py-20 px-2 md:px-8 shrink-0">
     
     <h2 class="font-bebas text-[48px] md:text-[64px] leading-none text-[#737373] mb-12 md:mb-16 tracking-wide pl-4 md:pl-8">
@@ -259,94 +361,103 @@
     </h2>
 
     <!-- Сетка 2x2 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+    <div class="cases-grid">
         
         <!-- Карточка 1: TEZBAR -->
-        <a href="https://www.behance.net/gallery/253718053/TezBar-Marketplace-for-Kazakhstan-UIUX-Redesign" class="group relative block rounded-[20px] bg-[#0F0F0F]  overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-            <!-- Изображение (без своего скругления, обрезается родителем) -->
-            <div class="aspect-[627/661] w-full bg-gray-800 isolate">
+        <a href="https://www.behance.net/gallery/253718053/TezBar-Marketplace-for-Kazakhstan-UIUX-Redesign" class="case-card">
+            <div class="case-media">
                 <img 
                     src="./assets/images/tezbar.webp" 
                     alt="Редизайн TezBar" 
-                    class="w-full h-full object-cover"
                     loading="lazy"
                 />
             </div>
 
-            <!-- Контент снизу -->
-            <div class="p-6 flex items-center justify-between">
-                <div>
-                    <h3 class="font-bebas text-xl md:text-2xl text-white mb-1 tracking-wide">TEZBAR</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans">Редизайн Казахстанского супераппа</p>
+            <div class="case-caption">
+                <div class="case-chips">
+                    <span class="case-logo">TB</span>
+                    <span class="case-tag">Продуктовый дизайн</span>
                 </div>
-                <!-- Стрелочка -->
-                <svg class="w-6 h-6 text-gray-500 group-hover:text-[#8B5CF6] group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div>
+                    <h3 class="case-title">TEZBAR</h3>
+                    <p class="case-sub">Редизайн Казахстанского супераппа</p>
+                </div>
+                <svg class="case-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </div>
         </a>
 
         <!-- Карточка 2: COFOUNDERS-MATCH -->
-        <a href="https://www.behance.net/gallery/254745091/Cofounders-Match-Team-Platform-Full-UXUI-Design" class="group relative block rounded-[20px] bg-[#0F0F0F] overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-            <div class="aspect-[627/661] w-full bg-gray-800 isolate">
+        <a href="https://www.behance.net/gallery/254745091/Cofounders-Match-Team-Platform-Full-UXUI-Design" class="case-card">
+            <div class="case-media">
                 <img 
                     src="./assets/images/co-founders.webp" 
                     alt="Co-Founders Match" 
-                    class="w-full h-full object-cover"
                     loading="lazy"
                 />
             </div>
 
-            <div class="p-6 flex items-center justify-between">
-                <div>
-                    <h3 class="font-bebas text-xl md:text-2xl text-white mb-1 tracking-wide">COFOUNDERS-MATCH</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans">Дизайн платформы для поиска сооснователей</p>
+            <div class="case-caption">
+                <div class="case-chips">
+                    <span class="case-logo">CF</span>
+                    <span class="case-tag">Продуктовый дизайн</span>
                 </div>
-                <svg class="w-6 h-6 text-gray-500 group-hover:text-[#8B5CF6] group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div>
+                    <h3 class="case-title">COFOUNDERS MATCH</h3>
+                    <p class="case-sub">Дизайн платформы для поиска сооснователей</p>
+                </div>
+                <svg class="case-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </div>
         </a>
 
         <!-- Карточка 3: ВЕРНЫЙ ДРУГ -->
-        <a href="https://www.behance.net/gallery/248719987/Animal-Shelter-Website-Design-UXUI-Case-Study" class="group relative block rounded-[20px] bg-[#0F0F0F]  overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-            <div class="aspect-[627/661] w-full bg-gray-800 isolate">
+        <a href="https://www.behance.net/gallery/248719987/Animal-Shelter-Website-Design-UXUI-Case-Study" class="case-card">
+            <div class="case-media case-media--up">
                 <img 
                     src="./assets/images/friend.webp" 
                     alt="Верный друг" 
-                    class="w-full h-full object-cover"
                     loading="lazy"
                 />
             </div>
 
-            <div class="p-6 flex items-center justify-between">
-                <div>
-                    <h3 class="font-bebas text-xl md:text-2xl text-white mb-1 tracking-wide">ВЕРНЫЙ ДРУГ</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans">Многостраничный сайт для приюта</p>
+            <div class="case-caption">
+                <div class="case-chips">
+                    <span class="case-logo">ВД</span>
+                    <span class="case-tag">Веб-дизайн</span>
                 </div>
-                <svg class="w-6 h-6 text-gray-500 group-hover:text-[#8B5CF6] group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div>
+                    <h3 class="case-title">ВЕРНЫЙ ДРУГ</h3>
+                    <p class="case-sub">Многостраничный сайт для приюта</p>
+                </div>
+                <svg class="case-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </div>
         </a>
 
         <!-- Карточка 4: ВЯТСКИЙ ПОСАД -->
-        <a href="https://www.behance.net/gallery/243225337/dizajn-lendinga-dlja-orlovskoj-pravoslavnoj-gimnazii" class="group relative block rounded-[20px] bg-[#0F0F0F] overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.1)]">
-            <div class="aspect-[627/661] w-full bg-gray-800 isolate">
+        <a href="https://www.behance.net/gallery/243225337/dizajn-lendinga-dlja-orlovskoj-pravoslavnoj-gimnazii" class="case-card">
+            <div class="case-media">
                 <img 
                     src="./assets/images/gym.webp" 
                     alt="Вятский Посад" 
-                    class="w-full h-full object-cover"
                     loading="lazy"
                 />
             </div>
 
-            <div class="p-6 flex items-center justify-between">
-                <div>
-                    <h3 class="font-bebas text-xl md:text-2xl text-white mb-1 tracking-wide">ВЯТСКИЙ ПОСАД</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans">Лендинг для Орловской гимназии</p>
+            <div class="case-caption">
+                <div class="case-chips">
+                    <span class="case-logo">ВП</span>
+                    <span class="case-tag">Веб-дизайн</span>
                 </div>
-                <svg class="w-6 h-6 text-gray-500 group-hover:text-[#8B5CF6] group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div>
+                    <h3 class="case-title">ВЯТСКИЙ ПОСАД</h3>
+                    <p class="case-sub">Лендинг для Орловской гимназии</p>
+                </div>
+                <svg class="case-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </div>
